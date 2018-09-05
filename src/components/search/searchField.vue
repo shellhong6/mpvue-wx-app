@@ -57,8 +57,13 @@ export default {
       setTimeout(() => {
         this.$store.commit('changeSearchInputVal', val)
       }, 0)
+      console.log('this.searchHasChosing---', this.searchHasChosing)
       if (this.searchHasChosing) {
-        console.log('--')
+        if (val === '') {
+          this.$store.commit('changeSearchStatus', 'resulting')
+        } else {
+          this.$store.commit('changeSearchStatus', 'associativing')
+        }
       } else {
         if (val === '') {
           this.$store.commit('changeSearchStatus', 'searchtiping')

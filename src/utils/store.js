@@ -18,7 +18,8 @@ function spread (map) {
 var state = {
   searchStatus: 'normal', // normal, searchtiping, associativing, resulting
   searchHasChosing: false,
-  searchInputVal: ''
+  searchInputVal: '',
+  searchWord: ''
 }
 
 const store = new Vuex.Store({
@@ -26,12 +27,21 @@ const store = new Vuex.Store({
   mutations: {
     changeSearchStatus: (state, status) => {
       state.searchStatus = status
+      if (status === 'resulting') {
+        store.commit('changeSearchHasChosing', true)
+      }
+      if (status === 'normal' || status === 'searchtiping') {
+        store.commit('changeSearchHasChosing', false)
+      }
     },
     changeSearchHasChosing: (state, status) => {
       state.searchHasChosing = status
     },
     changeSearchInputVal: (state, val) => {
       state.searchInputVal = val
+    },
+    changeSearchWord: (state, val) => {
+      state.searchWord = val
     }
   },
   getters: spread(state)

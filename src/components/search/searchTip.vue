@@ -5,7 +5,7 @@
         <div class='searchTip-view-header'>热门搜索</div>
         <div class="searchTip-view-hot-words">
           <template v-for='(word, index) in hotWord'>
-            <span :data-text='word'>{{word}}</span>
+            <span @tap='hotWordTapHandle(word)'>{{word}}</span>
           </template>
         </div>
       </div>
@@ -15,10 +15,10 @@
         <div class='searchTip-view-header'>搜索历史</div>
         <div class="searchTip-view-history-words">
           <template v-for='(word, index) in historyWord'>
-            <div class="searchTip-view-history-line" :data-text='word'>
-              <div class="history-icon" :data-text='word'></div>
+            <div @tap='historyWordTapHandle(word)' class="searchTip-view-history-line">
+              <div class="history-icon"></div>
               <span :data-text='word'>{{word}}</span>
-              <div class="history-remove-icon"></div>
+              <div @tap.stop='removeTapHandle(index)' class="history-remove-icon"></div>
             </div>
           </template>
         </div>
@@ -61,6 +61,17 @@ export default {
   },
 
   methods: {
+    hotWordTapHandle (word) {
+      this.$store.commit('changeSearchWord', word)
+      this.$store.commit('changeSearchStatus', 'resulting')
+    },
+    historyWordTapHandle (word) {
+      this.$store.commit('changeSearchWord', word)
+      this.$store.commit('changeSearchStatus', 'resulting')
+    },
+    removeTapHandle (index) {
+      this.historyWord.splice(index, 1)
+    },
     getSearchTipData: (function () {
       var result = null
       return function () {

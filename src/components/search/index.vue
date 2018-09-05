@@ -1,20 +1,20 @@
 <template>
   <div class='wrapper'>
     <div class="header-container">
-      <div id='back-btn' class="back-btn">
+      <div @tap='backTapHandle' :class="['back-btn', {'back-btn-searching':(searchStatus!=='normal')}]">
         <img src="../../../static/images/search/lt.png" alt=""/>
       </div>
 
-      <search-field></search-field>
+      <search-field :inputPlaceholder='inputPlaceholder'></search-field>
 
-      <div id='search-btn-field' class="search-btn-field">
+      <div id='search-btn-field' :class="['search-btn-field', {'search-btn-field-searching':(searchStatus!=='normal')}]">
         <div id="shopping-car" class="shopping-car">
           <img src="../../../static/images/search/shopping-car.png" alt=""/>
         </div>
         <div id='user-info' class="user-info">
           <img src="../../../static/images/search/user-info.png" alt=""/>
         </div>
-        <div id='search-btn' class="search-btn"><span>搜索</span></div>
+        <div @tap="searchBtnTapHandle" class="search-btn"><span>搜索</span></div>
       </div>
     </div>
     <search-tip></search-tip>
@@ -32,12 +32,14 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      test: 1
+      inputPlaceholder: '修罗武神'
     }
   },
   computed: {
     ...mapGetters([
-      'searchStatus'
+      'searchStatus',
+      'searchInputVal',
+      'searchHasChosing'
     ])
   },
   components: {
@@ -47,34 +49,35 @@ export default {
     resultView
   },
 
+  watch: {
+    searchStatus (newVal) {
+      if (newVal === 'normal') {
+        this.$store.commit('changeSearchInputVal', '')
+        this.inputPlaceholder = Math.random()
+      }
+    }
+  },
+
   methods: {
-    bindViewTap () {
-      const url = '../logs/main'
-      wx.navigateTo({ url })
+    backTapHandle () {
+      if(this.searchHasChosing && this.searchStatus === 'associativing'){ //TODO
+        this.$store.commit('changeSearchStatus', 'resulting')
+        return
+      }
+      if (this.searchStatus === 'resulting') {
+        this.$store.commit('changeSearchStatus', 'searchtiping')
+      } else {
+        this.$store.commit('changeSearchStatus', 'normal')
+      }
     },
-    getUserInfo () {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: (res) => {
-              this.userInfo = res.userInfo
-            }
-          })
-        }
-      })
-    },
-    clickHandle (msg, ev) {
-      console.log('clickHandle:', msg, ev)
+    searchBtnTapHandle () {
+      var searchWord = this.searchInputVal || this.inputPlaceholder
+      this.$store.commit('changeSearchWord', searchWord)
+      this.$store.commit('changeSearchStatus', 'resulting')
     }
   },
 
   created () {
-    setTimeout(() => {
-      this.test = 2
-    }, 3000)
-    // 调用应用实例的方法获取全局数据
-    this.getUserInfo()
   }
 }
 </script>

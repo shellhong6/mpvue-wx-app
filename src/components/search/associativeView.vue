@@ -2,8 +2,8 @@
 <div class="associative-view-container">
   <template v-if='associativeWords && associativeWords.length'>
       <template v-for='word in associativeWords'>
-        <div class='associative-view-word-line' :data-text='word' :key='word'>
-          <span :data-text='word'>{{word}}</span>
+        <div class='associative-view-word-line' @tap='tapHandle' :data-text='word' :key='word'>
+          <span>{{word}}</span>
         </div>
       </template>
   </template>
@@ -38,6 +38,10 @@ export default {
   },
 
   methods: {
+    tapHandle (word) {
+      this.$store.commit('changeSearchWord', word)
+      this.$store.commit('changeSearchStatus', 'resulting')
+    },
     getAssociativeWords () {
       return this.dealSearchInputValChange()
     },

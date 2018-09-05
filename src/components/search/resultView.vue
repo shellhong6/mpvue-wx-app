@@ -14,40 +14,54 @@
   </div>
 </template>
 <script>
+import Result from '@/data/searchResult'
+import { mapGetters } from 'vuex'
+
+var oldWord = ''
+
 export default {
   data () {
     return {
+      result: []
     }
+  },
+
+  computed: {
+    ...mapGetters([
+      'searchWord'
+    ])
   },
 
   components: {
   },
 
   methods: {
-    bindViewTap () {
-      const url = '../logs/main'
-      wx.navigateTo({ url })
-    },
-    getUserInfo () {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: (res) => {
-              this.userInfo = res.userInfo
-            }
-          })
+    getResult (word) {
+      return new Promise((resolve, reject) => {
+        if (word && word !== oldWord) {
+          oldWord = word
+          resolve(Result.value.ebook.items)
+        } else {
+          resolve(this.result)
         }
       })
-    },
-    clickHandle (msg, ev) {
-      console.log('clickHandle:', msg, ev)
     }
   },
 
-  created () {
-    // 调用应用实例的方法获取全局数据
-    this.getUserInfo()
+  watch: {
+    searchWord (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.getResult(newVal).then((res) => {
+          this.result = res
+        })
+      }
+    }
+  },
+
+  mounted () {
+    this.getResult(this.searchWord).then((res) => {
+      this.result = res
+    })
   }
 }
 </script>
@@ -73,6 +87,8 @@ export default {
     padding-left: @containerPaddingLr;
     padding-right: @containerPaddingLr;
     background-color: #ffffff;
+    box-sizing: border-box;
+    overflow-y: auto;
   }
   .search-result-view-line{
     display: flex;
