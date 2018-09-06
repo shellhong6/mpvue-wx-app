@@ -1,5 +1,5 @@
 <template>
-  <div class="search-result-view-container">
+  <div class="search-result-view-container" :style="{display:searchResultStatus}">
     <template v-if='result.length'>
       <template v-for='item in result'>
         <div class='search-result-view-line'>
@@ -28,8 +28,19 @@ export default {
 
   computed: {
     ...mapGetters([
-      'searchWord'
-    ])
+      'searchWord',
+      'searchStatus'
+    ]),
+    searchResultStatus () {
+      if (this.searchStatus === 'resulting') {
+        this.getResult(this.searchWord).then((res) => {
+          this.result = res
+        })
+        return 'block'
+      } else {
+        return 'none'
+      }
+    }
   },
 
   components: {
@@ -49,19 +60,17 @@ export default {
   },
 
   watch: {
-    searchWord (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.getResult(newVal).then((res) => {
-          this.result = res
-        })
-      }
-    }
+    // searchWord (newVal, oldVal) {
+    //   if (newVal !== oldVal) {
+    //     this.getResult(newVal).then((res) => {
+    //       this.result = res
+    //     })
+    //   }
+    // }
   },
 
   mounted () {
-    this.getResult(this.searchWord).then((res) => {
-      this.result = res
-    })
+
   }
 }
 </script>

@@ -5,7 +5,7 @@
         <img src="../../../static/images/search/lt.png" alt=""/>
       </div>
 
-      <search-field :inputPlaceholder='inputPlaceholder'></search-field>
+      <search-field></search-field>
 
       <div id='search-btn-field' :class="['search-btn-field', {'search-btn-field-searching':(searchStatus!=='normal')}]">
         <div id="shopping-car" class="shopping-car">
@@ -19,7 +19,7 @@
     </div>
     <search-tip></search-tip>
     <associative-view v-if="searchStatus=='associativing'"></associative-view>
-    <result-view v-if="searchStatus=='resulting'"></result-view>
+    <result-view></result-view>
   </div>
 </template>
 <script>
@@ -32,14 +32,14 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      inputPlaceholder: '修罗武神'
     }
   },
   computed: {
     ...mapGetters([
       'searchStatus',
       'searchInputVal',
-      'searchHasChosing'
+      'searchHasChosing',
+      'searchInputPlaceholder'
     ])
   },
   components: {
@@ -50,17 +50,18 @@ export default {
   },
 
   watch: {
-    searchStatus (newVal) {
-      if (newVal === 'normal') {
-        this.$store.commit('changeSearchInputVal', '')
-        this.inputPlaceholder = Math.random()
-      }
-    }
+    // searchStatus (newVal) {
+    //   console.log('searchStatus newVal---', newVal)
+    //   if (newVal === 'normal') {
+    //     this.$store.commit('changeSearchInputVal', '')
+    //     this.inputPlaceholder = Math.random()
+    //   }
+    // }
   },
 
   methods: {
     backTapHandle () {
-      if(this.searchHasChosing && this.searchStatus === 'associativing'){ //TODO
+      if (this.searchHasChosing && this.searchStatus === 'associativing') {
         this.$store.commit('changeSearchStatus', 'resulting')
         return
       }
@@ -71,7 +72,7 @@ export default {
       }
     },
     searchBtnTapHandle () {
-      var searchWord = this.searchInputVal || this.inputPlaceholder
+      var searchWord = this.searchInputVal || this.searchInputPlaceholder
       this.$store.commit('changeSearchWord', searchWord)
       this.$store.commit('changeSearchStatus', 'resulting')
     }

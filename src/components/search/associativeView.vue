@@ -2,7 +2,7 @@
 <div class="associative-view-container">
   <template v-if='associativeWords && associativeWords.length'>
       <template v-for='word in associativeWords'>
-        <div class='associative-view-word-line' @tap='tapHandle' :data-text='word' :key='word'>
+        <div class='associative-view-word-line' @tap='tapHandle(word)' :key='word'>
           <span>{{word}}</span>
         </div>
       </template>

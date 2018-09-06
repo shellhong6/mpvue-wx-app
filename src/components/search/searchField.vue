@@ -3,7 +3,7 @@
     <button style="opacity:0;position:fixed;top:-100px;left:-100px;width:0;height:0;"></button>
     <div class="input-field-bg">
       <img class="search-icon" src="../../../static/images/search/search.png" alt="">
-      <input @focus='focusHandle' @input='inputHandle' type="text" v-model="inputVal" :placeholder="inputPlaceholder"></input>
+      <input @focus='focusHandle' @input='inputHandle' type="text" v-model="inputVal" :placeholder="searchInputPlaceholder"></input>
       <img @tap='tapClearHandle' :class="['search-clear', {'search-clear-searching':isShowClearBtn}]" src="../../../static/images/search/clear.png" alt="">
     </div>
 </div>
@@ -14,21 +14,24 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      inputVal: ''
+      inputVal: '' // 为了解决v-model闪烁问题，不能使用getters中的searchInputVal，而且尽量把两者分开处理，减少searchInputVal对inputVal的影响
     }
   },
 
-  props: {
-    inputPlaceholder: {
-      type: 'string',
-      default: ''
+  watch: {
+    searchInputVal (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.inputVal = newVal
+      }
     }
   },
 
   computed: {
     ...mapGetters([
       'searchHasChosing',
-      'searchStatus'
+      'searchStatus',
+      'searchInputVal',
+      'searchInputPlaceholder'
     ]),
     isShowClearBtn () {
       if (this.inputVal === '') {
@@ -39,10 +42,12 @@ export default {
     }
   },
 
-  watch: {},
-
   methods: {
     focusHandle () {
+      if (this.searchInputVal !== '') {
+        this.$store.commit('changeSearchStatus', 'associativing')
+        return
+      }
       if (this.searchStatus === 'normal') {
         this.$store.commit('changeSearchStatus', 'searchtiping')
       }
@@ -57,7 +62,6 @@ export default {
       setTimeout(() => {
         this.$store.commit('changeSearchInputVal', val)
       }, 0)
-      console.log('this.searchHasChosing---', this.searchHasChosing)
       if (this.searchHasChosing) {
         if (val === '') {
           this.$store.commit('changeSearchStatus', 'resulting')
@@ -74,6 +78,7 @@ export default {
     },
     tapClearHandle () {
       this.inputVal = ''
+      this.$store.commit('changeSearchInputVal', '')
       setTimeout(() => {
         this.inputHandle('')
       }, 10)

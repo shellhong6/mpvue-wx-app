@@ -19,6 +19,7 @@ var state = {
   searchStatus: 'normal', // normal, searchtiping, associativing, resulting
   searchHasChosing: false,
   searchInputVal: '',
+  searchInputPlaceholder: '',
   searchWord: ''
 }
 
@@ -27,10 +28,14 @@ const store = new Vuex.Store({
   mutations: {
     changeSearchStatus: (state, status) => {
       state.searchStatus = status
+      if (status === 'normal') {
+        store.commit('changeSearchInputPlaceholder', Math.random())
+      }
       if (status === 'resulting') {
         store.commit('changeSearchHasChosing', true)
       }
       if (status === 'normal' || status === 'searchtiping') {
+        store.commit('changeSearchInputVal', '')
         store.commit('changeSearchHasChosing', false)
       }
     },
@@ -40,8 +45,12 @@ const store = new Vuex.Store({
     changeSearchInputVal: (state, val) => {
       state.searchInputVal = val
     },
+    changeSearchInputPlaceholder: (state, val) => {
+      state.searchInputPlaceholder = val
+    },
     changeSearchWord: (state, val) => {
       state.searchWord = val
+      store.commit('changeSearchInputVal', val)
     }
   },
   getters: spread(state)
