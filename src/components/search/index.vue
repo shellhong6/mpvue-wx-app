@@ -17,9 +17,9 @@
         <div @tap="searchBtnTapHandle" class="search-btn"><span>搜索</span></div>
       </div>
     </div>
-    <search-tip></search-tip>
+    <search-tip v-if='isShowSearchTip'></search-tip>
     <associative-view v-if="searchStatus=='associativing'"></associative-view>
-    <result-view></result-view>
+    <result-view v-if='isShowResult'></result-view>
   </div>
 </template>
 <script>
@@ -32,6 +32,8 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
+      isShowSearchTip: false,
+      isShowResult: false
     }
   },
   computed: {
@@ -50,13 +52,13 @@ export default {
   },
 
   watch: {
-    // searchStatus (newVal) {
-    //   console.log('searchStatus newVal---', newVal)
-    //   if (newVal === 'normal') {
-    //     this.$store.commit('changeSearchInputVal', '')
-    //     this.inputPlaceholder = Math.random()
-    //   }
-    // }
+    searchStatus (newVal) {
+      if (newVal === 'searchtiping') {
+        this.isShowSearchTip = true
+      } else if (newVal === 'resulting') {
+        this.isShowResult = true
+      }
+    }
   },
 
   methods: {
