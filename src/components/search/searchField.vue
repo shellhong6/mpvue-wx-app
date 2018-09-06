@@ -2,9 +2,9 @@
   <div class="search-field-container">
     <button style="opacity:0;position:fixed;top:-100px;left:-100px;width:0;height:0;"></button>
     <div class="input-field-bg">
-      <img class="search-icon" src="../../../static/images/search/search.png" alt="">
+      <img mode="widthFix" class="search-icon" src="../../../static/images/search/search.png" alt="">
       <input @focus='focusHandle' @input='inputHandle' type="text" v-model="inputVal" :placeholder="searchInputPlaceholder"></input>
-      <img @tap='tapClearHandle' :class="['search-clear', {'search-clear-searching':isShowClearBtn}]" src="../../../static/images/search/clear.png" alt="">
+      <img mode="widthFix" @tap='tapClearHandle' :class="['search-clear', {'search-clear-searching':isShowClearBtn}]" src="../../../static/images/search/clear.png" alt="">
     </div>
 </div>
 </template>
@@ -128,13 +128,13 @@ export default {
     }
   }
   .input-field-bg .search-icon{
-    width: @searchIconW;
+    width: @searchIconW + 6;
     height: @searchIconH;
     margin-left: @searchIconMl;
     margin-right: @searchIconMr;
   }
   .search-clear{
-    width: @searchClearWH;
+    width: @searchClearWH + 6;
     height: @searchClearWH;
     margin-left: @searchClearMl;
     margin-right: @searchClearMr;
