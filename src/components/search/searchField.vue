@@ -20,6 +20,7 @@ export default {
 
   watch: {
     searchInputVal (newVal, oldVal) {
+      console.log('newVal, oldVal--', newVal, oldVal)
       if (newVal !== oldVal) {
         this.inputVal = newVal
       }

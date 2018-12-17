@@ -2,7 +2,7 @@
   <div class='wrapper'>
     <div class="header-container">
       <div @tap='backTapHandle' :class="['back-btn', {'back-btn-searching':(searchStatus!=='normal')}]">
-        <img src="../../../static/images/search/lt.png" alt=""/>
+        <!-- <img src="../../../static/images/search/lt.png" alt=""/> -->
       </div>
 
       <search-field></search-field>
@@ -63,15 +63,15 @@ export default {
 
   methods: {
     backTapHandle () {
-      if (this.searchHasChosing && this.searchStatus === 'associativing') {
-        this.$store.commit('changeSearchStatus', 'resulting')
-        return
-      }
-      if (this.searchStatus === 'resulting') {
-        this.$store.commit('changeSearchStatus', 'searchtiping')
-      } else {
-        this.$store.commit('changeSearchStatus', 'normal')
-      }
+      // if (this.searchHasChosing && this.searchStatus === 'associativing') {
+      //   this.$store.commit('changeSearchStatus', 'resulting')
+      //   return
+      // }
+      // if (this.searchStatus === 'resulting') {
+      //   this.$store.commit('changeSearchStatus', 'searchtiping')
+      // } else {
+      //   this.$store.commit('changeSearchStatus', 'normal')
+      // }
     },
     searchBtnTapHandle () {
       var searchWord = this.searchInputVal || this.searchInputPlaceholder
@@ -129,7 +129,8 @@ export default {
   .back-btn{
     display: flex;
     flex-shrink: 0;
-    width: @backBtnW;
+    width: @btnFieldSearchingPl;
+    // width: @backBtnW;
     align-items: center;
     img{
       margin-left: @backBtnMl;
@@ -138,7 +139,8 @@ export default {
     }
   }
   .back-btn-searching{
-    width: @backBtnSearchingW;
+    // width: @backBtnSearchingW;
+    width: @btnFieldSearchingPl;
     img{
       display: flex;
     }

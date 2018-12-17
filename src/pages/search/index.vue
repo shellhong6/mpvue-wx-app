@@ -1,40 +1,20 @@
 <template>
   <div class="container" @click="clickHandle('test click', $event)">
-
-    <div class="userinfo" @click="bindViewTap">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
-      <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
-      </div>
-    </div>
-
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
-      </div>
-    </div>
-
-    <form class="form-container">
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
-    <a href="/pages/search/main" class="counter">去往search示例页面</a>
+    <search></search>
   </div>
 </template>
 
 <script>
-import card from '@/components/card'
+import search from '@/components/search/index'
 
 export default {
   data () {
     return {
-      motto: 'Hello World',
-      userInfo: {}
     }
   },
 
   components: {
-    card
+    search
   },
 
   methods: {
@@ -62,6 +42,10 @@ export default {
   created () {
     // 调用应用实例的方法获取全局数据
     this.getUserInfo()
+  },
+
+  mounted () {
+    this.$store.commit('changeSearchStatus', 'searchtiping')
   }
 }
 </script>
